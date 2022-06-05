@@ -117,7 +117,7 @@ app.delete('/api/notes/:id', (req, res) => {
   function getNotes() {
     return this.read()
         .then(notes => {
-            return JSON.parse(notes) //|| [];
+            return JSON.parse(notes) || [];
         })
 }
 
