@@ -1,3 +1,4 @@
+
 const PORT = process.env.PORT || 3005;
 const fs = require('fs');
 const path = require('path');
@@ -5,7 +6,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-const allNotes = require('./Develop/db/db.json');
+
+const { notes } = require('./Develop/db/db.json')
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -13,7 +15,7 @@ app.use(express.json());
 app.use(express.static('./Develop/public'));
 
 app.get('/api/notes', (req, res) => {
-    res.json(allNotes.slice(1));
+    res.json(notes);
 });
 
 app.get('/', (req, res) => {
@@ -50,9 +52,24 @@ function createNewNote(body, notesArray) {
 */
 
 app.post('/api/notes', (req, res) => {
+    const newNote = req.body
+    //newNote.id = uuid()
+    const note = req.body
+    notes.push(note);
+    fs.writeFile('./Develop/db/db.json', JSON.stringify(notes , null, 2), function (err, data) {
+      if (err) {
+        throw err
+      } else {
+        res.send(data)
+      }
+    });
+  });
+
+/*app.post('/api/notes', (req, res) => {
     const newNote = createNewNote(req.body, allNotes);
     res.json(newNote);
 });
+*/
 
 function deleteNote(id, notesArray) {
     for (let i = 0; i < notesArray.length; i++) {
