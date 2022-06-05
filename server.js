@@ -7,9 +7,10 @@ const app = express();
 
 const allNotes = require('./Develop/db/db.json');
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('./Develop/public'));
 
 app.get('/api/notes', (req, res) => {
     res.json(allNotes.slice(1));
@@ -41,6 +42,13 @@ function createNewNote(body, notesArray) {
     return note;
 }
 
+/*const saveNote = (function () {
+    const notesEl = document.getElementsByClassName("note-textarea")
+    const notesCache = JSON.parse(localStorage.getItem('saveNote') || "[]");
+    notesCache.forEach(createNewNote)
+})
+*/
+
 app.post('/api/notes', (req, res) => {
     const newNote = createNewNote(req.body, allNotes);
     res.json(newNote);
@@ -70,3 +78,4 @@ app.delete('/api/notes/:id', (req, res) => {
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
+
